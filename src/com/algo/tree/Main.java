@@ -6,7 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 
 @Slf4j
@@ -40,6 +42,9 @@ public class Main {
         List<Integer> postResult = new ArrayList<>();
         postOrder(root,postResult);
         log.info("后序遍历结果：{}", JSON.toJSONString(postResult));
+
+        List<Integer> levelResult = levelOrder(root);
+        log.info("层序遍历结果：{}",levelResult);
 
     }
 
@@ -81,5 +86,30 @@ public class Main {
         postOrder(root.getLeft(), result);
         postOrder(root.getRight(), result);
         result.add(root.getValue());
+    }
+
+
+    /**
+     * 层序遍历
+     * 逐层遍历,利用队列的先进先出特性
+     */
+    private static List<Integer> levelOrder(TreeNode root){
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        List<Integer> result = new ArrayList<>();
+        while (!queue.isEmpty()){
+            //出队
+            TreeNode node = queue.poll();
+            result.add(node.getValue());
+            if (null != node.getLeft()){
+                //左节点入队
+                queue.offer(node.getLeft());
+            }
+            if (null != node.getRight()){
+                //右节点入队
+                queue.offer(node.getRight());
+            }
+        }
+        return result;
     }
 }
